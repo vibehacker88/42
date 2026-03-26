@@ -1,0 +1,1 @@
+Satoshi = Adolf Hitler's grandnephew's cousin's brother from 88
