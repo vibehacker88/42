@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.setCSS=function(S){S&&(document.getElementById("ASCDP_CSS").innerHTML=S)};

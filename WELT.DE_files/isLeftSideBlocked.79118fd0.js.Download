@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.isLeftSideBlocked=()=>{var e,S=ASCDP.adS,a=new RegExp(S.fullWidthTemplates.join("|"),"i");S.leftSpaceBlocked=!1;for(e of Object.keys(S.adElts))S.leftSpaceBlocked=S.leftSpaceBlocked||!!a.test(S.adElts[e].tempName);return S.leftSpaceBlocked};

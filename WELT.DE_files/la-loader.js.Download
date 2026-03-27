@@ -1,0 +1,160 @@
+!(function() {
+
+  if ((readCookie("laloader") !== '') && !window.isLoaderInDarklaunch) {
+      const loaderEnvironment = readCookie("laloader");
+      const script = document.createElement("script");
+      script.setAttribute("type", "text/javascript");
+      script.setAttribute("src", "https://" + loaderEnvironment + "/la-loader-welt.js");
+      document.head.appendChild(script);
+      window.isLoaderInDarklaunch = true;
+      return;
+  }
+  
+  if(window.laLoaderInitialized === true){
+      return;
+  }else{
+      window.laLoaderInitialized = true;
+  }
+  
+  try {
+      window.mfWidgetInfo = JSON.parse('{"settings":{"name":"settings","resource":"widget-settings.1d5ee511c1435383dd2c.js"},"devmode":{"name":"devmode","resource":"widget-devmode.688368524c11f47f3481.js"},"miniprofile":{"name":"miniprofile","resource":"widget-miniprofile.532157e35088bcb21bcd.js"},"profileupdate":{"name":"profileupdate","resource":"widget-profileupdate.980eafd67b9ede5f7164.js"},"commented-articles":{"name":"commented-articles","resource":"widget-commented-articles.eca01d58df44e4063bd1.js"},"voucher":{"name":"voucher","resource":"widget-voucher.8878c07efb8588b71ddd.js"},"inbox":{"name":"inbox","resource":"widget-inbox.ce75b353490bbf3ffee4.js"},"info-layer":{"name":"info-layer","resource":"widget-info-layer.f882941b8d6bbcde3137.js"}}');
+  } catch(e) {
+      window.mfWidgetInfo = {};
+  }
+  
+  function isFeatureEnabled(feature, featureCookie) {
+      return (window.LaCommons && window.LaCommons.config && window.LaCommons.config.feature && window.LaCommons.config.feature[feature]) || readCookie(featureCookie) === "true";
+  }
+  
+  function readCookie(cookieName) {
+      var re = new RegExp('[; ]' + cookieName + '=([^\\s;]*)');
+      var sMatch = (' ' + document.cookie).match(re);
+      if (cookieName && sMatch) {
+          return unescape(sMatch[1]);
+      }
+      return '';
+  }
+  
+  var head = document.getElementsByTagName("head").item(0);
+  
+  function addOnLoad(element, callback) {
+      if (element.addEventListener) {
+          element.addEventListener("load", callback, false);
+      } else if (element.attachEvent) {
+          element.attachEvent("onload", callback);
+      } else {
+          element["onload"] = callback;
+      }
+  }
+  
+  function addElement(elementName, attributes, onLoad) {
+      var element = document.createElement(elementName);
+      for (var attribute in attributes) {
+          if (attributes.hasOwnProperty(attribute)) {
+              element.setAttribute(attribute, attributes[attribute]);
+          }
+      }
+      if (onLoad) {
+          addOnLoad(element, onLoad);
+      }
+      head.appendChild(element);
+  }
+  
+  function callAfterPageLoaded(callback) {
+      if (document.readyState === "complete") {
+          callback();
+          return;
+      }
+  
+      window.addEventListener('load', function(event){
+          callback();
+      });
+  }
+  
+  function isDarklaunch() {
+      return (localStorage && localStorage.getItem("darklaunch") === "on") ||
+          readCookie("ladarklaunch") === "on" ||
+          readCookie("darklaunch") === "on" ||
+          window.location.hash.indexOf("#darklaunch") >= 0;
+  }
+  
+  function loadJs(ressourceIdentifier, defaultHost, resource, version, cookieName, callback) {
+      var customHost = readCookie(cookieName);
+      var useVersion = version && (!customHost || customHost === defaultHost);
+      var path = "//" + (customHost || defaultHost) + resource + (useVersion ? ("?v=" + version) : "");
+      addElement("script", {
+        type: "text/javascript",
+        async: true,
+        src: path
+      }, callback);
+  }
+
+  //handle darklaunch bootstrap
+  var darklaunch
+
+  function initCommons(callback) {
+    loadJs("laCommons", "resources-production.la.welt.de", "/loader/la-commons.js", "ff1f4bf69ce6b41d", "commonsstage", callback);
+  }
+
+  function initLiveApps() {
+
+    // commentary application
+    if (!isFeatureEnabled("communityEmergency", "featureCommunityEmergency") &&
+      !isFeatureEnabled("communityMaintenance", "featureCommunityMaintenance") &&
+      !isFeatureEnabled("communityPreventLoading", "featureCommunityPreventLoading")
+    ) {
+      (function() {
+        loadJs("laCommunityWeb", "co.la.welt.de", "/js/communityweb.js", "438ac9683e965f32", "communityWebStage");
+      })();
+    }
+
+    // fallback handling
+    loadJs("laSchrotty",  "schrotty.la.welt.de", "/js/la-schrotty.js", "01f770472e5c53e6", "schrottystage");
+
+    // public profile
+    if (document.location.href.indexOf("profil.welt.de") >= 0) {
+      loadJs("laProfile",  "profil.welt.de", "/js/la-profile.js", "6f6d25594e73e034", "profilestage");
+    }
+
+    loadJs("laVe",  "resources-production.la.welt.de", "/love/js/la-ve.js", "4822383ff21f59bc", "lovestage");
+    loadJs("laHyper",  "resources-production.la.welt.de", "/la-hyper/la-hyper.js", "b667efe4a74878c9", "hyperstage");
+  }
+
+  function initDarkLaunchApps() {
+    loadJs("laVader",  "vader.la.welt.de", "/la-vader.js", "6dc6b5fec40193bd", "vaderstage");
+
+    if (isFeatureEnabled("c1Checkout", "featureC1Checkout")) {
+      addElement("script", {
+        type: "text/javascript",
+        async: true,
+        src: "https://as.zerotired.com/v1/"
+      });
+    }
+  }
+
+  darklaunch = isDarklaunch();
+
+  initCommons(function() {
+    if (window.eventSystem !== undefined && window.eventSystem.fireEvent !== undefined) {
+      window.eventSystem.fireEvent("la-commons::loaded");
+    }
+
+    initLiveApps();
+
+    if (darklaunch) {
+      initDarkLaunchApps();
+    }
+  });
+
+  if (!darklaunch && window.location.hash.indexOf("#darklaunch") === -1) {
+    window.addEventListener("hashchange", function() {
+      if (window.location.hash.indexOf("#darklaunch") >= 0) {
+        initCommons(function() {
+          initDarkLaunchApps();
+        });
+      }
+    });
+  }
+
+
+})();

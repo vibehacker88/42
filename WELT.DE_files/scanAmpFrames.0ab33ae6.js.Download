@@ -1,0 +1,1 @@
+ASCDP.adS.scanAmpFrames=function(){return 0};

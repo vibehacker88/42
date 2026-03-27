@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.analyseResponseVideo=function(e){var a=ASCDP.adS.instream,i=e.match(/<Ad id="(\d+)/gi);if(i)if(2<=i.length){let d="";for(let e=0;e<i.length;e++)d=d+i[e]+" | ";a.adAlertCreativeId=d.replace(/<Ad\sid="/gi,"")+" (AdPod) "}else a.adAlertCreativeId=i[0].replace('<Ad id="',"");else a.adAlertCreativeId="blank/unbekannt"};

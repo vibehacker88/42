@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.getPrivacyWatchReport=function(){return{adResponses:ASCDP.adS.getAdInfo(Object.keys(ASCDP.adS.adElts)),pageTarget:apntag?.requests?.keywords,tcString:ASCDP.tcf.data.tcString}};

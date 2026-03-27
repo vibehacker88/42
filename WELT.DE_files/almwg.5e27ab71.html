@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- saved from url=(0147)https://www.asadcdn.com/adlib/libmodules/extensions/almwg.5e27ab71.html?ref=https%3A%2F%2Fwww.welt.de&branch=abtest&tsn=9473031570185&siteName=welt -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>NMT AlmWG</title>
+</head>
+<body>
+<script type="text/javascript">
+    function stringToUint(string) {
+        string = btoa(unescape(encodeURIComponent(string)));
+        const charList = string.split(''), uintArray = [];
+        charList.forEach(entry => {
+            uintArray.push(entry.charCodeAt(0));
+        })
+        return new Uint8Array(uintArray);
+    }
+
+    function uintToString(uintArray) {
+        const encodedString = String.fromCharCode.apply(null, uintArray)
+        return decodeURIComponent(escape(atob(encodedString)));
+    }
+
+    function removeIds(vendor) {
+        const v = store[vendor];
+        Object.keys(v.ids).forEach(id => {
+            let mappedVendor;
+            Object.keys(vendorMap).forEach(mapId => {
+                if (vendorMap[mapId].includes(id)) {
+                    mappedVendor = mapId;
+                }
+            });
+            if (!mappedVendor || now > v.validDates[id] || !v.ids[id] || v.ids[id] === "receiving") {
+                delete store[vendor].ids[id];
+                delete store[vendor].craftDates[id];
+                delete store[vendor].validDates[id];
+            }
+            if (mappedVendor !== vendor) {
+                if (mappedVendor) {
+                    store[mappedVendor] = store[mappedVendor] || {
+                        craftDates: {},
+                        validDates: {},
+                        ids: {}
+                    }
+                    store[mappedVendor].ids[id] = store[vendor].ids[id];
+                    store[mappedVendor].craftDates[id] = store[vendor].craftDates[id];
+                    store[mappedVendor].validDates[id] = store[vendor].validDates[id];
+                }
+                console.log("delete ", vendor);
+                delete store[vendor].ids[id];
+                delete store[vendor].craftDates[id];
+                delete store[vendor].validDates[id];
+            }
+        });
+        if (!Object.keys(store[vendor].ids).length) {
+            delete store[vendor];
+            document.cookie = "acorns_" + vendor + "=; SameSite=None; Secure; expires=Fri, 31 Dec 2000 23:59:59 GMT;";
+        }
+    }
+
+    const reqOrigin = decodeURIComponent((location.href.match(/ref=(.*?)&/) || ["", ""])[1]),
+        oldCookie = document.cookie.match(/acorns=(.*?)($|;)/i), store = {},
+        vendorMap = {
+            mi: ["heidi"],
+            se: ["hans", "peter"]
+        };
+    let cookieVendors = document.cookie.match(/acorns_list=(.*?)($|;)/i);
+
+    if (oldCookie) {
+        let oldStore = {};
+        try {
+            oldStore = JSON.parse(uintToString(oldCookie[1].split(",")));
+        } catch (e) {
+            try {
+                oldStore = oldCookie[1].split(",");
+            } catch (err) {
+                document.cookie = "acorns=; SameSite=None; Secure; expires=Sun, 31 Dec 2000 23:59:59 GMT;";
+            }
+        }
+        if (oldStore.length) {
+            cookieVendors = oldCookie;
+            document.cookie = "acorns_list=" + oldCookie[1] + "; " +
+                "SameSite=None; Secure; expires=Thu, 31 Dec 2999 23:59:59 GMT;";
+        } else {
+            cookieVendors = ["", Object.keys(oldStore).join()];
+            if (cookieVendors.length) {
+                document.cookie = "acorns_list=" + cookieVendors.join() + "; " +
+                    "SameSite=None; Secure; expires=Thu, 31 Dec 2999 23:59:59 GMT;";
+                cookieVendors.forEach(vendor => {
+                    document.cookie = "acorns_" + vendor + "=" +
+                        stringToUint(JSON.stringify(oldStore[vendor])).join("|") +
+                        "; SameSite=None; Secure; expires=Thu, 31 Dec 2999 23:59:59 GMT;";
+                });
+            }
+        }
+        document.cookie = "acorns=; SameSite=None; Secure; expires=Sun, 31 Dec 2000 23:59:59 GMT;";
+    }
+
+    let result = !!cookieVendors, now = new Date().getTime(), vendorList = [];
+
+    if (!cookieVendors) {
+        document.cookie = "cookieTest=1; SameSite=None; Secure; expires=Thu, 31 Dec 2999 23:59:59 GMT; Partitioned;";
+        result = document.cookie.match("cookieTest");
+        document.cookie = "cookieTest=; SameSite=None; Secure; expires=Sun, 31 Dec 2000 23:59:59 GMT; Partitioned;";
+    } else {
+        vendorList = cookieVendors[1].split(",");
+    }
+
+    vendorList.forEach(vendor => {
+        const cookieMatch = new RegExp(`acorns_${vendor}=(.*?)($|;)`, 'i');
+        const vendorCookie = document.cookie.match(cookieMatch);
+        store[vendor] = {
+            craftDates: {},
+            ids: {},
+            validDates: {}
+        };
+        if (vendorCookie) {
+            try {
+                store[vendor] = JSON.parse(vendorCookie[1]);
+            } catch (e) {
+                try {
+                    store[vendor] = JSON.parse(uintToString(vendorCookie[1].split("|")));
+                } catch (err) {
+                    delete store[vendor];
+                }
+            }
+        }
+        if (store[vendor]) {
+            removeIds(vendor);
+        }
+    });
+    const postData = {
+        message: "tcc",
+        data: {
+            nexusId: result ? 1 : 0,
+            store: store
+        }
+    }
+    parent.postMessage(postData, reqOrigin || "*");
+
+    let lStorage;
+    try {
+        lStorage = !!window.localStorage;
+    } catch (e) {
+        lStorage = false;
+    }
+
+    function msgListener(msg) {
+        if (msg.origin === reqOrigin && msg.data.vendors) {
+            const d = msg.data.data, vendors = msg.data.vendors;
+            now = new Date().getTime();
+            vendors.forEach(vendor => {
+                if (!store[vendor]) {
+                    store[vendor] = d[vendor];
+                } else {
+                    const ids = Object.keys(d[vendor].ids);
+                    ids.forEach(id => {
+                        const storeDate = store[vendor].craftDates[id] || now;
+                        if (d[vendor].ids[id] !== "receiving" ||
+                            now <= d[vendor].validDates[id] && d[vendor].craftDates[id] <= storeDate) {
+                            store[vendor].ids[id] = d[vendor].ids[id];
+                            store[vendor].craftDates[id] = d[vendor].craftDates[id];
+                            store[vendor].validDates[id] = d[vendor].validDates[id];
+                        }
+                    });
+                }
+                removeIds(vendor);
+                document.cookie = "acorns_" + vendor + "=" + stringToUint(JSON.stringify(store[vendor])).join("|") +
+                    "; SameSite=None; Secure; expires=Thu, 31 Dec 2999 23:59:59 GMT;";
+            });
+            document.cookie = "acorns_list=" + vendors.join() + "; " +
+                "SameSite=None; Secure; expires=Thu, 31 Dec 2999 23:59:59 GMT;";
+        }
+    }
+
+    window.addEventListener("message", msgListener, false);
+</script>
+
+
+</body></html>

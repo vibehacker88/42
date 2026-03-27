@@ -1,0 +1,17 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.fillFrame=function(r,s,l,c){if(r&&s){var p;-1<s.indexOf("<iframe")&&((p=(s.match(/id=['"](.*?)['"]/)||["",""])[1])&&(r.id=p),s=s.replace(/\swidth=(.*?)([0-9]+).*?([\s>])/," width=$1100%$1$3").replace(/\sheight=(.*?)([0-9]+).*?([\s>])/," height=$1100%$1$3"));let e=ASCDP.pageSet,t=ASCDP.adS.adElts[l],i=c?.options?.meta?.brand||"",n=c?.options?.meta?.description||"",o=l||r.id||"",a="de"===e.language?"ANZEIGE":"ADVERTISEMENT",d=(i&&(a+=("de"===e.language?" von ":" from ")+i),n&&(a+=". "+n),`<!doctype html>
+        <html lang="en">
+        <head>
+            <title>${a}</title>
+            <style>html,body{width:100%;height:100%;}</style>`);"file:"===location.protocol&&(d+=`<base href='https://${e?.siteDomain||location.host}' target='_blank' />`),window.ReportingObserver&&(p=ASCDP.hashMap.extensions.reportIntervention,d+='<script src="'+`https://www.asadcdn.com/adlib/libmodules/extensions/reportIntervention.${p}.js`+'"><\/script>'),d+=`<script>
+        window.inDapIF = window.inDapMgrIf = true;
+        window.apntag_targetId = window.ContId = "${o.replace("_ibanner","")}";
+        window.frameId = "${r.id}";
+        window.sas_ajax = false;
+        (window._adform = window._adform || []).push([ "resizeInFIF", false ]);
+    </script>
+    </head>
+    <body style="margin:0;padding:0">
+        `+s,-1<s.indexOf("<iframe")&&(d+=`<script>window.top.ovkvmf.ads2Handle.push({
+            "id": "${r.id}",
+            "adFrame": document.querySelector('iframe').contentWindow
+            })</script>`),d+="</body></html>",r.srcdoc=d,r.title=a,c?.options?.addClickOverlay&&((l=document.createElement("div")).style.cssText="width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;z-index: 100!important; position: absolute!important;",l.onclick=function(){window.open(t.clickThrough+encodeURIComponent(c.clickUrl),c.clickUrlTarget)},r.parentNode.appendChild(l))}};

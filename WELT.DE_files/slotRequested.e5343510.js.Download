@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.slotRequested=function(S,o){ASCDP.adS.debug&&console.log("%cADLIB: slotRequested for "+S,ASCDP.adS.logColor,o)};

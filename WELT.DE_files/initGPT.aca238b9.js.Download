@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.initGPT=()=>{googletag.apiReady?googletag.pubadsReady||(googletag.pubads().enableSingleRequest(),googletag.pubads().disableInitialLoad(),googletag.setAdIframeTitle("adlib-gpt-frame"),googletag.enableServices()):setTimeout(ASCDP.adS.initGPT.init,20)};

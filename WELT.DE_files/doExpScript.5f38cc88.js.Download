@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.doExpScript=function(e,a,t,c,S){var d="0",p=a,r=t,i="0";switch(c){case"down":r=t-S;break;case"left":i=S;break;case"right":p=a-S;break;case"top":d=S}document.getElementById(e).style.clip="rect("+d+"px "+p+"px "+r+"px "+i+"px)"};

@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.rewindMatrix=function(a){var e,d=ASCDP.adS,t=ASCDP.pageSet;for(e in d.mainSlot=null,a)a.hasOwnProperty(e)&&d.adElts[e]&&(delete d.block[e],d.adElts[e].blockedBy="",d.adElts[e].blocked=!1,d.adElts[e].tempName=ASCDP.adtemplates.oracle[e].rtb,t.adPlacements.push(e),d.sightLoader())};

@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.removePlhld=l=>{l=ASCDP.adS.adElts[l];l.plhldNode&&(l.plhldRemoved=!0,l.plhldNode.remove(),delete l.plhldNode,l.adSlot.style.position="relative",l.masterSlot.style.height=l.adSlot.style.height="auto",console.log("%cADLIB: plhldRemoved by removePlhld for "+l.contId,ASCDP.adS.logColor))};

@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.startAdAlert=e=>{var a=ASCDP.adS;e&&e.key===a.alertCode[a.keylog.length]?a.keylog+=e.key:a.keylog="",a.keylog.toLowerCase()===a.alertCode&&(ASCDP.adalert?ASCDP.adalert.renderBox():(a.loadModules(["adalert"],null,"extensions"),a.keylog=""))};

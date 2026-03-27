@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.ovkvmf=ASCDP.ovkvmf||{},ASCDP.ovkvmf.renderAdElt=function(S){var A,d=JSON.parse(S[2]);for(A of Object.keys(d))ASCDP.adS.adElts[S[1]][A]=d[A];ASCDP.adS.renderAdElt(S[1])};

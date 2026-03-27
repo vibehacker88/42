@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.calcX=(e,t=0)=>{var a=window.getComputedStyle(e);let d=t,n=e.parentNode;return e.offsetParent&&"BODY"!==n.tagName&&(n=e.offsetParent),"none"===a.display||"hidden"===a.visibility?NaN:"BODY"===n.tagName?d+=n.getBoundingClientRect().left:(d+=n.offsetLeft,ASCDP.adS.calcX(n,d))};

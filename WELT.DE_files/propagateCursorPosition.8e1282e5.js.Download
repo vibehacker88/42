@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.ovkvmf=ASCDP.ovkvmf||{},ASCDP.ovkvmf.propagateCursorPosition=function(o){for(var r in ovkvmf.registredFrames)ovkvmf.registredFrames.hasOwnProperty(r)&&ovkvmf.sendCursorPosition(r,o)};

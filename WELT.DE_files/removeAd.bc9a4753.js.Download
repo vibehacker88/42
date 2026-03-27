@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.removeAd=function(S){var a=ASCDP.adS,S=S.replace("_rlSlot","");a.ccf(S),a.ccf(S+"_rlSlot")};

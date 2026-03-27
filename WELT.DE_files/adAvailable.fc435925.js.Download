@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.adAvailable=function(a,e){let d=ASCDP.adS,t=ASCDP.pageSet,S=d.adElts[a];"video"===e.adType&&(S.outstream=!0),S.readyToShow=!0,S.placementSize=S.placementSize||e.width+"x"+e.height,t.xhrVideoInterceptor||(S.hasAd=!0,d.adCallRunning=!1),d.loadModules(["sightLoader"],function(){d.backtimer||d.sightLoader(a)})};

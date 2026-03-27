@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.ovkvmf=ASCDP.ovkvmf||{},ASCDP.ovkvmf.pushPageCenter=function(e){e=e.replace(/_(ibanner|frame\d)/i,""),ASCDP.adS.adElts[e].running?setTimeout(function(){ASCDP.ovkvmf.pushPage(e,"Center")},100):ASCDP.ovkvmf.pushPage(e,"Center")};

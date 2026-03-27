@@ -1,0 +1,195 @@
+var OEmbed = (function (exports) {
+    'use strict';
+
+    function addViewportMetaTagIfStandaloneView() {
+        var isViewportMetaTagMissing = !document.head.querySelector('meta[name="viewport"]');
+
+        if (isViewportMetaTagMissing) {
+            var metaTag = document.createElement('meta');
+            metaTag.name = 'viewport';
+            metaTag.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0';
+
+            document.getElementsByTagName('head')[0].appendChild(metaTag);
+        }
+    }
+
+    var classCallCheck = function (instance, Constructor) {
+      if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+      }
+    };
+
+    var createClass = function () {
+      function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+          var descriptor = props[i];
+          descriptor.enumerable = descriptor.enumerable || false;
+          descriptor.configurable = true;
+          if ("value" in descriptor) descriptor.writable = true;
+          Object.defineProperty(target, descriptor.key, descriptor);
+        }
+      }
+
+      return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);
+        if (staticProps) defineProperties(Constructor, staticProps);
+        return Constructor;
+      };
+    }();
+
+    // eslint-disable-next-line no-unused-vars
+    var PodigeeSingleEpisodePodcastPlayer = function () {
+        function PodigeeSingleEpisodePodcastPlayer(options) {
+            classCallCheck(this, PodigeeSingleEpisodePodcastPlayer);
+
+            this.options = options;
+        }
+
+        createClass(PodigeeSingleEpisodePodcastPlayer, [{
+            key: 'render',
+            value: function render() {
+                addViewportMetaTagIfStandaloneView();
+
+                this.initPlayer();
+            }
+        }, {
+            key: 'initPlayer',
+            value: function initPlayer() {
+                return this.initRootElement().then(this.getEpisodeId.bind(this)).then(this.initPodigeePlayer.bind(this)).catch(function (error) {
+                    console.error('Error while initializing podigee player.', error);
+                });
+            }
+        }, {
+            key: 'initRootElement',
+            value: function initRootElement() {
+                var _this = this;
+
+                var podcastSelectorAddition = this.options.hash === '###hash###' ? '' : '-' + this.options.hash;
+
+                return this.getOEmbedElement().then(function () {
+                    _this.rootElement = document.querySelector('[data-content="PodigeeSinglePlayer' + podcastSelectorAddition + '"]');
+                });
+            }
+        }, {
+            key: 'getEpisodeId',
+            value: function getEpisodeId() {
+                if (PodigeeSingleEpisodePodcastPlayer.isStandaloneView()) {
+                    return PodigeeSingleEpisodePodcastPlayer.getUrlParameter('episodeId');
+                }
+
+                if (this.options.episodeId && !this.options.episodeId.includes('###')) {
+                    return this.options.episodeId;
+                }
+
+                // Fallback for when oembed-service did not replace the hash
+                return this.getOEmbedElement().then(function (element) {
+                    return new URL(element.dataset.oembedUrl).searchParams.get('episodeId') || '';
+                });
+            }
+        }, {
+            key: 'getOEmbedElement',
+            value: function getOEmbedElement() {
+                var _this2 = this;
+
+                return new Promise(function (resolve, reject) {
+                    if (PodigeeSingleEpisodePodcastPlayer.isStandaloneView()) {
+                        resolve(document.body);
+                    }
+
+                    var oembedUrls = document.querySelectorAll('[data-oembed-url]');
+                    for (var i = 0; i < oembedUrls.length; i += 1) {
+                        var url = oembedUrls[i].dataset.oembedUrl;
+                        oembedUrls[i].setAttribute('data-index', '' + i);
+
+                        if (url.indexOf(_this2.options.folderName) > -1) {
+                            resolve(oembedUrls[i]);
+                        }
+                    }
+                    reject(new Error('No element for podcast ' + _this2.options.folderName + ' found.'));
+                });
+            }
+        }, {
+            key: 'initPodigeePlayer',
+            value: function initPodigeePlayer(episodeId) {
+                var _this3 = this;
+
+                return new Promise(function (resolve, reject) {
+                    var script = document.createElement('script');
+
+                    script.setAttribute('class', 'podigee-podcast-player');
+                    script.setAttribute('src', 'https://cdn.podigee.com/podcast-player/javascripts/podigee-podcast-player.js');
+                    script.setAttribute('data-configuration', 'https://' + _this3.options.podcastName + '.podigee.io/' + episodeId + '/embed?context=external');
+                    script.async = true;
+
+                    script.addEventListener('load', resolve);
+                    script.addEventListener('error', function (e) {
+                        reject(new Error('Error while loading podigee script: ' + e));
+                    });
+
+                    _this3.rootElement.appendChild(script);
+                });
+            }
+        }], [{
+            key: 'isStandaloneView',
+            value: function isStandaloneView() {
+                var standaloneHostNames = ['static', 'localhost'];
+
+                return standaloneHostNames.filter(function (hostName) {
+                    return window.location.hostname.indexOf(hostName) > -1;
+                }).length > 0;
+            }
+
+            // taken from https://davidwalsh.name/query-string-javascript
+
+        }, {
+            key: 'getUrlParameter',
+            value: function getUrlParameter(name) {
+                // eslint-disable-next-line no-useless-escape
+                var cleanedName = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+
+                var regex = new RegExp('[\\?&]' + cleanedName + '=([^&#]*)');
+                var results = regex.exec(window.location.search);
+
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+        }]);
+        return PodigeeSingleEpisodePodcastPlayer;
+    }();
+
+    // eslint-disable-next-line no-unused-vars
+    var PodigeeNewestPodcastPlayer = function () {
+        function PodigeeNewestPodcastPlayer(options) {
+            classCallCheck(this, PodigeeNewestPodcastPlayer);
+
+            this.options = options;
+
+            this.rootElement = document.getElementById(this.options.id);
+        }
+
+        createClass(PodigeeNewestPodcastPlayer, [{
+            key: 'render',
+            value: function render() {
+                addViewportMetaTagIfStandaloneView();
+
+                this.initPlayer();
+            }
+        }, {
+            key: 'initPlayer',
+            value: function initPlayer() {
+                var script = document.createElement('script');
+                script.setAttribute('class', 'podigee-podcast-player');
+                script.setAttribute('src', 'https://cdn.podigee.com/podcast-player/javascripts/podigee-podcast-player.js');
+                script.setAttribute('data-configuration', 'https://' + this.options.podcastName + '.podigee.io/embed?context=external');
+
+                this.rootElement.appendChild(script);
+            }
+        }]);
+        return PodigeeNewestPodcastPlayer;
+    }();
+
+    exports.PodigeeSingleEpisodePodcastPlayer = PodigeeSingleEpisodePodcastPlayer;
+    exports.PodigeeNewestPodcastPlayer = PodigeeNewestPodcastPlayer;
+
+    return exports;
+
+}({}));

@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.getWrapperWidth=function(e){var e=e.offsetParent&&"BODY"!==e.parentNode.tagName?e.offsetParent:e.parentNode,t=getComputedStyle(e).width;return-1<t.indexOf("%")||isNaN(parseInt(t))?ASCDP.adS.getWrapperWidth(e):parseInt(t)};

@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.ovkvmf=ASCDP.ovkvmf||{},ASCDP.ovkvmf.propagatePosY=function(){for(var v in ovkvmf.registredFrames)ovkvmf.registredFrames.hasOwnProperty(v)&&ovkvmf.sendYPos(v)};

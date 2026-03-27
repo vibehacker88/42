@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.addCSS=function(S,e){let d=document.getElementById("ASCDP_CSS");if(S){var n;if(e)if(!(d=document.getElementById(e+"_CSS")))return(n=document.createElement("style")).id=e+"_CSS",n.innerHTML=S,void ASCDP.adS.adElts[e].adSlot.appendChild(n);d.innerHTML+=S}};

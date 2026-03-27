@@ -1,0 +1,1 @@
+var ASCDP=window.ASCDP||{};ASCDP.adS=ASCDP.adS||{},ASCDP.adS.slotOnload=function(o,S){ASCDP.adS.debug&&console.log("%cADLIB: slotOnload for "+o,ASCDP.adS.logColor,S)};

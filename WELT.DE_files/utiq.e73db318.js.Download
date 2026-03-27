@@ -1,0 +1,102 @@
+ASCDP.partners.utiq={trackUrl:"https://www.asadcdn.com/flairfire/tmi.png",topLevelDomain:"sportbild.de"===ASCDP.pageSet.siteDomain?"bild.de":ASCDP.pageSet.siteDomain,validTime:6,rejectTime:3,consented:!1,utiqEligibilityUUID4:null,loadLib:function(e){let n=ASCDP.pageSet,a=ASCDP.partners.utiq,s=ASCDP.adS,d=ASCDP.tcf.customVendors.utiq.store,t=window.Utiq=window.Utiq||{};t.config={listeners:{onInitialised:()=>{s.debug&&t.API.setVerboseLoggingLevel(),e?.(),console.log("%cADLIB utiq onInitialised: ",s.logColor,arguments)},onFlowCompleted:()=>{console.log("%cADLIB utiq onFlowCompleted: ",s.logColor,arguments)},onEligibilityChecked:({isEligible:e})=>{console.log("%cADLIB utiq onEligibilityChecked: ",s.logColor,arguments,e)},onConsentManagerStatusChanged:({status:e})=>{console.log("%cADLIB utiq onConsentManagerStatusChanged: ",s.logColor,arguments,e)},onConsentUpdateFinished:e=>{console.log("%cADLIB utiq onConsentUpdateFinished: ",s.logColor,arguments,e.isConsentGranted),window.removeEventListener("beforeunload",a.bounceListener);var t=e.isConsentGranted?7:6;s.fireRequest(`${a.trackUrl}?c=${t}&branch=${n.branch}&connType=`+n.connectionType),e.isConsentGranted?d.ids.mtid="receiving":d.ids.mtid="rejected",a.updateData(e.isConsentGranted)},onConsentChanging:({isConsentGranted:e})=>{console.log("%cADLIB utiq onConsentChanging: ",s.logColor,arguments,e)},onIdsAvailable:({mtid:e,atid:t,attrid:n,category:i,ttl:r,domain:o})=>{console.log("%cADLIB utiq onIdsAvailable: ",s.logColor,arguments,e,t,n,i,r,o),d.ids.mtid=e,d.ids.atid=t,"number"==typeof r?(d.validDates.atid=new Date(r).getTime(),d.craftDates.atid=d.validDates.atid-7776e6,d.validDates.mtid=new Date(r).getTime(),d.craftDates.mtid=d.validDates.mtid-7776e6):(d.craftDates.atid=d.craftDates.atid||(new Date).getTime(),d.validDates.atid=d.craftDates.atid+7776e6,d.craftDates.mtid=d.craftDates.mtid||(new Date).getTime(),d.validDates.mtid=d.craftDates.mtid+7776e6),a.updateData(!0)}},IS_TEST_MODE_ACTIVE:s.debug,integrations:{disableGoogleSecureSignals:!0},CMP:"Custom",customUtiqHost:"https://utiq."+a.topLevelDomain},window.Utiq?.API?e&&e():s.loadScripts(["https://utiq."+a.topLevelDomain+"/utiqLoader.js"])},updateData:function(e){var t=ASCDP.tcf.customVendors.utiq.store,n=ASCDP.partners.utiq,i=new Date;let r=i.getMonth()+(e?n.validTime:n.rejectTime),o=i.getFullYear();11<r&&(r-=12,o+=1);var e=new Date(o,r,i.getDate());t.validDates.mtid=t.validDates.atid=t.validDates.mtid||e.getTime(),t.craftDates.mtid=t.craftDates.atid=t.craftDates.mtid||i.getTime(),"receiving"!==t.ids.mtid?ASCDP.adS.loadModules(["kobel"],function(){ASCDP.adS.kobel.sendData()}):window.Utiq.API?.getIdGraphEntry&&(n=window.Utiq.API.getIdGraphEntry("atid"),e=window.Utiq.API.getIdGraphEntry("mtid"),n&&!/\s/.test(n)&&(t.ids.atid=n,t.craftDates.atid-=86400),e)&&!/\s/.test(e)&&(t.ids.mtid=e,t.craftDates.mtid-=86400),localStorage.setItem("asadTls",JSON.stringify(ASCDP.pageSet.technicalLS)),ASCDP.adS.sendToStore(["utiq"],["mtid","atid"])},bounceListener:function(){var e=ASCDP.pageSet;ASCDP.adS.fireRequest(`${ASCDP.partners.utiq.trackUrl}?c=8&branch=${e.branch}&connType=`+e.connectionType)},showConsentLayer:function(){document.body.classList.add("pubLayerActive");let e=ASCDP.pageSet,t=ASCDP.partners.utiq,n=ASCDP.adS,i=`
+                #utiqConsLayer a, #utiqConsLayer a:visited, #utiqConsLayer a:hover {
+                    text-decoration: underline; 
+                    color: #000000;
+                }
+                @media (min-width:468px) {
+                    #utiqConsWrapper, #rejectLayerWrapper {
+                        max-width: 486px;
+                    }
+                }
+                @media (min-width: 768px) {
+                    #utiqConsWrapper {
+                        max-height: 650px;
+                        max-width: 800px;
+                    }
+                    #utiqConsCloseButton, #utiqConsSubmitButton {
+                        height: 49px;
+                    }
+                    #rejectLayerWrapper {
+                        max-width: 800px;
+                    }
+                }`,r=`color: #FFFFFF; text-decoration: none; height: 16px; display: block; margin: auto;
+                position: absolute; bottom: 0; top: 0; right: 0; left: 0; line-height: 18px; font-size: 16px;
+                font-weight: bold; font-family: Arial;`,o=[{label:e.branding.printAlias+" Datenschutzerklärung",url:e.branding?.dsUrl||"/404"},{label:"Utiq-Datenschutzerklärung",url:"https://consenthub.utiq.com/pages/privacy-statement"},{label:"Impressum",url:e.branding?.imprintUrl||"/404"},{label:"FAQ",url:"https://consenthub.utiq.com/pages/faq"},{label:"UTIQ verwalten",url:"https://consenthub.utiq.com/"}],a=(window.addEventListener("beforeunload",t.bounceListener,!1),e.pageCSS+=i,n.addCSS(i),e.overlayArr.push("#utiqConsLayer"),e.showPartnerConsentLayer=!0,document.createElement("div"));var s=document.createElement("div"),d=document.createElement("div"),l=document.createElement("div"),u=document.createElement("div"),c=document.createElement("div"),g=document.createElement("div");let p=document.createElement("div"),m=document.createElement("div"),h=document.createElement("div");var b=document.createElement("div"),f=document.createElement("div"),C=document.createElement("div"),v=document.createElement("div");a.id="utiqConsLayer",a.style.cssText=`position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; max-width: 100vw; max-height: 100vh;
+            height: 100%; overflow: hidden; background: rgba(22, 22, 22, 0.6); z-index: 2000000;`,s.id="utiqConsWrapper",s.style.cssText=`margin: auto; box-sizing: border-box; box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
+            position: absolute; left: 0; right: 0; bottom: 0; font-family: Arial; top: 0;`,d.id="utiqConsContainer",d.style.cssText=`position: absolute; background: rgb(255, 255, 255); left: 0; right: 0;
+        bottom: 0; top: 0; margin: 20px; padding: 20px; display: flex; gap: 12px; align-content: stretch; flex-direction: column; justify-content: 
+        space-evenly; border-radius: 15px;`,l.id="utiqConsHeader",l.style.cssText="color: #202020; height: 45px; order: 1; position: relative; display: flex; place-content: space-between; flex-direction: row;",c.id="utiqConsLogo",c.style.cssText="height: 25px; max-width: 75%; order: 1",c.innerHTML=`<img src='${e.branchPath}img/logos/utiq.png' style='height:100%; width:auto;' alt="utiqLogo"/>`,g.id="utiqConsPublisherLogo",g.style.cssText="height: 25px; max-width: 75%; order: 2",g.innerHTML=`<img src='${e.branding.logo}' style='height:100%; width:auto;' alt="publisherLogo"/>`,u.id="utiqConsTitle",u.style.cssText="order: 2; text-align: center;",u.innerHTML=`<b style="font-weight: bold">Einwilligung in die Nutzung des Utiq-Dienstes auf ${e.branding.printName}, unterstützt durch Ihren Telekommunikationsanbieter</b>`,b.id="utiqConsButtonBar",b.style.cssText="text-align: center; order: 5; display: flex; flex-direction: column-reverse; gap: 15px; margin-bottom: 15px;",p.id="utiqConsBody",p.style.cssText="font: 14px / 18px Arial;color: #1D1D1D; background: rgb(250, 250, 250);order: 3;overflow-y: scroll; text-overflow: ellipsis; padding: 5px;",p.innerHTML=`<span>
+                Willigen Sie in die Aktivierung der Utiq-Technologie ein, erstellt Ihr  
+                <a href="https://consenthub.utiq.com/pages/privacy-statement#telecom-operators" target="_blank">Telekommunikationsanbieter</a> 
+                anhand Ihrer IP-Adresse und einer Telekommunikationsreferenz (z. B. Mobilfunknummer) eine pseudonyme 
+                Kennung („Netzwerksignal“) und übermittelt diese an Utiq. Daraus leitet Utiq zeitlich begrenzte 
+                Werbekennungen ab und stellt uns diese für die unten genannten Zwecke zur Verfügung.
+            </span>
+            <br/>
+            <br/>
+            <span>
+                Wir, die Axel Springer Deutschland GmbH, nutzen die Werbekennungen, um Ihre Browsing-Aktivitäten 
+                über unsere <a href="#" onclick="ASCDP.partners.utiq.openPopUp()">Angebote</a> hinweg zu verknüpfen 
+                (soweit Sie auf diesen ebenfalls in die Aktivierung 
+                der Utiq-Technologie eingewilligt haben). Dies geschieht für die Zwecke "Personalisierte Werbung 
+                und Inhalte, Messung von Werbeleistung und der Performance von Inhalten, Zielgruppenforschung 
+                sowie Entwicklung und Verbesserung von Angeboten". Zur Speicherung Ihres Einwilligungsstatus und 
+                zum Abruf der erzeugten Werbekennungen werden Cookies auf Ihrem Endgerät gesetzt.
+            </span>
+            <br/>
+            <br/>
+            <span>
+                Unsere Nutzung schließt die Weitergabe der Werbekennungen an ausgewählte Drittanbieter ein. 
+                Nähere Informationen zu diesen Drittanbietern finden Sie an entsprechender Stelle in unserer 
+                Datenschutzerklärung oder im Privacy-Manager. Utiq nutzt Ihre Daten auch zur Verbesserung und 
+                Weiterentwicklung der Utiq-Technologie.
+            </span>
+            <br/>
+            <br/>
+            <span>
+                Mit Ihrer Einwilligung bestätigen Sie, dass Sie Inhaber des genutzten Telekommunikationskontos sind 
+                oder berechtigt sind, die Utiq-Technologie zu aktivieren.
+            </span>
+            <br/>
+            <br/>
+            <span>
+                Sie können Ihre Einwilligung jederzeit über den am Seitenende vorgehaltenen Link „Utiq verwalten“ 
+                sowie über den <a href="https://consenthub.utiq.com/" target="_blank">Utiq Consenthub</a> widerrufen. 
+                Um unser Angebot zu nutzen, ohne die Utiq-Technologie zu 
+                aktivieren, klicken sie auf "ablehnen".
+            </span>`,m.id="utiqConsMoreInfo",m.style.cssText="font-style: italic; color: #404040; display: none; text-overlow: ellipsis;",m.innerHTML=`<br/><b style="font-weight: bold">Details zur Aktivierung:</b>
+            <br/>Im Falle der Aktivierung der 
+            Utiq-Technologie wird Ihre IP-Adresse an Ihren Telekommunikationsanbieter weitergegeben, um eine 
+            pseudonyme Kennung („Netzwerksignal“) zu erstellen. Dies geschieht durch den Abgleich Ihrer IP-Adresse mit 
+            einer Referenz des verbundenen Telekommunikationskontos (z. B. Nutzerkontonummer oder Telefonnummer). Das 
+            Netzwerksignal stellt Ihr Telekommunikationsanbieter Utiq zur Verfügung. Utiq verwendet das Netzwerksignal, 
+            um die Utiq-Technologie zu betreiben, was die Erstellung von Werbekennungen mit begrenzter Lebensdauer 
+            beinhaltet. Zur Speicherung Ihres Einwilligungsstatus und zum Abruf der erzeugten Werbekennungen werden 
+            Cookies auf Ihrem Endgerät gesetzt.<br/>
+            <br/>
+            <b style="font-weight: bold">Unsere Nutzung der Utiq-Technologie:</b>
+            <br/>
+            Wir erhalten die Werbekennungen nur von Utiq und verwenden sie, um Ihre Browsing-Aktivitäten zu verstehen 
+            und Besuche über unsere Angebote hinweg zu verknüpfen (soweit Sie auf diesen ebenfalls die Einwilligung in 
+            die Aktivierung der Utiq-Technologie erteilt haben). Dies erfolgt für die Zwecke "Personalisierte Werbung 
+            und Inhalte, Messung von Werbeleistung und der Performance von Inhalten, Zielgruppenforschung sowie 
+            Entwicklung und Verbesserung von Angeboten". Bei gemeinsamer Nutzung der Internetverbindung durch mehrere 
+            Personen, werden allen einwilligenden Personen dieselben Werbekennungen zugewiesen. Dadurch werden deren 
+            Browsing-Aktivitäten miteinander verknüpft.<br/>
+            <br/>
+            Neben der jederzeitigen Möglichkeit, auf unserem Angebot über den Link "Utiq verwalten" am Seitenende die 
+            weitere Nutzung der Utiq Technologie und damit verbundene Datenverarbeitung zu widerrufen, können Sie auf 
+            dem Datenschutzportal von Utiq ("<a href="https://consenthub.utiq.com/" target="_blank">Utiq Consenthub</a>"), websiteübergreifend erteilte Einwilligungen in die 
+            Nutzung der Utiq-Technologie überprüfen und widerrufen. Weitere Informationen finden Sie zudem in der 
+            <a style="color: inherit;" href='https://consenthub.utiq.com/pages/privacy-statement' target='blank'>Datenschutzerklärung</a> von Utiq.”<br/>
+            <br/><br/><br/>`,f.id="utiqConsCloseButton",f.style.cssText=`position: relative; cursor:pointer; background: ${e.branding.mainColor};
+            border: 1px solid ${e.branding.mainColor}; box-sizing: border-box; border-radius: 3px; display: inline-block; width: 100%; height: 35px;`,f.innerHTML=`<span style='${r}'>Ablehnen</span>`,f.onclick=function(){ASCDP.tcf.customVendors.utiq.store.ids.mtid="rejected",t.updateData(!1),document.body.removeChild(a),window.Utiq.API.handleConsentChange(!1),n.fireRequest("https://utiq."+t.topLevelDomain+"/op/idconnect/mno-precheck?type=consent_rejected&transactionId="+ASCDP.partners.utiq.utiqEligibilityUUID4),document.body.classList.remove("pubLayerActive")},C.id="utiqConsSubmitButton",C.style.cssText=`position: relative; cursor:pointer; background: ${e.branding.mainColor};
+            border: 1px solid ${e.branding.mainColor}; box-sizing: border-box; border-radius: 3px; display: inline-block; width: 100%; height: 35px;`,C.innerHTML=`<span style='${r}'>Akzeptieren</span>`,C.onclick=function(){ASCDP.tcf.customVendors.utiq.store.ids.mtid="receiving",t.updateData(!0),document.body.removeChild(a),window.Utiq.API.handleConsentChange(!0),document.body.classList.remove("pubLayerActive")},h.id="utiqConsMoreLink",h.style.cssText=`order: 4; font-weight: 700; text-align: center; color: ${e.branding.mainColor}; cursor: pointer;`,h.innerHTML="Weitere Informationen",h.onclick=()=>{("Weitere Informationen"===h.innerHTML?(h.innerHTML="Wieder ausblenden",m.style.display="block",m):(h.innerHTML="Weitere Informationen",m.style.display="none",p.children[0])).scrollIntoView()},h.setAttribute("class","moreLink"),v.id="utiqConsPrivacy",v.style.cssText=`font-style: normal; font-weight: normal; text-overlow: ellipsis;
+            font-size: 14px; line-height: 18px; text-align: center; color: #202020; order: 6;`,v.innerHTML=o.map((e,t)=>{t=t===o.length-1;return`<a style='text-decoration-line: underline; color:#000000;' href='${e.url}' target='_blank'>${e.label}</a>`+(t?"":" | ")}).join(""),b.appendChild(f),b.appendChild(C),l.appendChild(c),l.appendChild(g),p.appendChild(m),d.appendChild(l),d.appendChild(u),d.appendChild(p),d.appendChild(h),d.appendChild(b),d.appendChild(v),s.appendChild(d),a.appendChild(s),document.body.appendChild(a),n.fireRequest("https://utiq."+t.topLevelDomain+"/op/idconnect/mno-precheck?type=consent_shown&transactionId="+ASCDP.partners.utiq.utiqEligibilityUUID4)},openPopUp:()=>{var e=ASCDP.pageSet;ASCDP.partners.utiq;let t=document.createElement("div");var n=document.createElement("div"),i=document.createElement("div"),r=document.createElement("div"),o=document.createElement("div");let a=document.createElement("div");var s=document.createElement("div"),d=document.createElement("div");t.id="rejectLayer",t.style.cssText=`position: fixed; top: 0; left: 0; bottom: 0; right: 0; width: 100%; max-width: 100vw; max-height: 100vh;
+        height: 100%; overflow: hidden; background: rgba(22, 22, 22, 0.6); z-index: 2000000;`,n.id="rejectLayerWrapper",n.style.cssText=`margin: auto; box-sizing: border-box; box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
+            position: absolute; left: 0; right: 0; bottom: 0; font-family: Arial; top: 0;`,i.id="rejectLayerContainer",i.style.cssText=`position: absolute; background: rgb(255, 255, 255); left: 0; right: 0;
+        bottom: 0; top: auto; margin: 20px; padding: 20px; display: flex; gap: 12px; align-content: stretch; flex-direction: column; justify-content: 
+        space-evenly; border-radius: 15px; max-height: 220px;`,o.style.cssText="height: 25px;",r.style.cssText="color: rgb(32, 32, 32); height: 45px; order: 1; position: relative; display: flex; place-content: flex-end; flex-direction: row;",a.style.cssText="font: 14px / 18px Arial; color: rgb(29, 29, 29); background: rgb(250, 250, 250); order: 2; overflow-y: scroll; text-overflow: ellipsis; padding: 5px;",s.style.cssText="text-align: center; order: 5; display: flex; flex-direction: column-reverse; gap: 15px;",d.style.cssText=`position: relative; cursor:pointer; background: ${e.branding.mainColor};
+            border: 1px solid ${e.branding.mainColor}; box-sizing: border-box; border-radius: 3px; display: inline-block; width: 100%; height: 35px;`,o.innerHTML="<img style='height:100%;' src='"+e.branding.logo+"' />",d.innerHTML=`<span style='color: #fff; text-decoration: none; height: 16px; display: block; margin: auto;
+                position: absolute; bottom: 0; top: 0; right: 0; left: 0; line-height: 18px; font-size: 16px;
+                font-weight: bold; font-family: Arial;'>Schließen</span>`,d.onclick=function(){document.body.removeChild(t)},s.appendChild(d),r.appendChild(o),i.appendChild(r),i.appendChild(a),i.appendChild(s),n.appendChild(i),t.appendChild(n),document.body.appendChild(t),["BILD.de","WELT.de","AUTOBILD.de","COMPUTERBILD.de"].forEach(e=>{var t=document.createElement("li");t.innerText=e,a.appendChild(t)})},rejectInit:function(){ASCDP.partners.utiq.loadLib()},reject:function(){var e=ASCDP.partners.utiq;window.Utiq?.API?window.Utiq.API.handleConsentChange(!1):ASCDP.partners.utiq.loadLib(function(){window.Utiq.API.handleConsentChange(!1)}),ASCDP.adS.fireRequest("https://utiq."+e.topLevelDomain+"/op/idconnect/mno-precheck?type=consent_rejected&transactionId="+ASCDP.partners.utiq.utiqEligibilityUUID4)},getId:function(){let n=ASCDP.tcf.customVendors.utiq.store,i=ASCDP.pageSet,r=ASCDP.partners.utiq,o=ASCDP.adS,a=new XMLHttpRequest,s=JSON.parse(sessionStorage?.getItem("asadTss_utiq")||"{}");var e=Number(s.eligibilityCheckTime??0);if("isEligible"in s){if(Date.now()-e<12e4)return;a.open("GET","https://utiq."+r.topLevelDomain+"/op/idconnect/mno-precheck?type=preload&transactionId="+ASCDP.partners.utiq.utiqEligibilityUUID4)}else a.open("GET","https://utiq."+r.topLevelDomain+"/op/idconnect/mno-precheck?type=preload&initial=true&transactionId="+ASCDP.partners.utiq.utiqEligibilityUUID4);a.onload=function(){var e=JSON.parse(a.response),t="ok"===e.status?0:1;o.fireRequest(`${r.trackUrl}?c=${t}&branch=${i.branch}&connType=`+i.connectionType),"ok"===e.status?(s.isEligible=!0,s.eligibilityCheckTime=String(Date.now()),sessionStorage.setItem("asadTss_utiq",JSON.stringify(s)),r.loadLib(function(){"receiving"===n.ids.mtid?r.updateData(!0):n.ids.mtid&&"rejected"!==n.ids.mtid||r.showConsentLayer()})):(s.isEligible=!1,s.eligibilityCheckTime=String(Date.now()),sessionStorage.setItem("asadTss_utiq",JSON.stringify(s)),i.technicalLS.utiq.tried++,localStorage.setItem("asadTls",JSON.stringify(i.technicalLS)))},a.send()},init:function(){var e=ASCDP.pageSet,t=ASCDP.tcf.customVendors.utiq.store,n=new Date(2023,6,1).getTime();ASCDP.partners.utiq.utiqEligibilityUUID4=(""+1e7+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,function(e){e=parseInt(e);return(e^window.crypto.getRandomValues(new Uint8Array(1))[0]&15>>e/4).toString(16)}),e.technicalLS.utiq=e.technicalLS.utiq||{tried:0},"tcloaded"===ASCDP.tcf.data.eventStatus&&(t.ids.mtid?.match(/^\d+$/)&&(t.ids.mtid="receiving"),(t.craftDates.mtid&&t.craftDates.mtid<n||t.validDates.mtid<(new Date).getTime())&&(delete t.ids.mtid,delete t.validDates.mtid,delete t.craftDates.mtid),ASCDP.partners.utiq.consented=t.ids.mtid&&"rejected"!==t.ids.mtid,"receiving"!==t.ids.mtid&&t.validDates.mtid?"rejected"!==t.ids.mtid&&ASCDP.partners.utiq.loadLib():ASCDP.partners.utiq.getId())}};
